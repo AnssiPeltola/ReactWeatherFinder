@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Header from "./Header"; // Importing the Header component
+import WeatherDisplay from "./WeatherDisplay";
 
 function App() {
   const [searchInput, setSearchInput] = useState(""); // Creating a state variable to store the search input
+  const [weatherData, setWeatherData] = useState(null); // Creating a state variable to store the weather data
 
   // Creating a function to handle the search input change
   function handleInputChange(event) {
@@ -51,7 +53,8 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        console.log(data); // Logging the data to the console
+        console.log(data); // Logging the data to the consolewww
+        setWeatherData(data); // Updating the weather data state variable
       })
       .catch((error) => {
         console.error("Error fetching weather data:", error);
@@ -65,6 +68,7 @@ function App() {
         onInputChange={handleInputChange}
         onSearchSubmit={handleSearchSubmit}
       />
+      <WeatherDisplay weatherData={weatherData} />
       {/* Using the Header component */}
       {/* Other components will go here */}
     </div>
