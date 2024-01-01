@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import Header from "./Header"; // Importing the Header component
 import WeatherDisplay from "./WeatherDisplay";
+import WeatherMap from "./WeatherMap";
 
 function App() {
   const [searchInput, setSearchInput] = useState(""); // Creating a state variable to store the search input
   const [weatherData, setWeatherData] = useState(null); // Creating a state variable to store the weather data
+  const [lat, setLat] = useState(null); // Creating a state variable to store the latitude
+  const [lon, setLon] = useState(null); // Creating a state variable to store the longitude
 
   // Creating a function to handle the search input change
   function handleInputChange(event) {
@@ -42,6 +45,9 @@ function App() {
     // Fetching the coordinates of the location
     fetchCoordinates(searchInput)
       .then(({ lat, lon }) => {
+        setLat(lat);
+        setLon(lon);
+
         const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
         const API_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`; // If want Fahrenheit units, change units=metric to units=imperial
         return fetch(API_URL);
@@ -69,8 +75,7 @@ function App() {
         onSearchSubmit={handleSearchSubmit}
       />
       <WeatherDisplay weatherData={weatherData} />
-      {/* Using the Header component */}
-      {/* Other components will go here */}
+      {lat && lon && <WeatherMap latitude={lat} longitude={lon} />}
     </div>
   );
 }
