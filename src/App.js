@@ -4,6 +4,7 @@ import WeatherDisplay from "./WeatherDisplay";
 import WeatherMap from "./WeatherMap";
 import WeatherForecast from "./WeatherForecast";
 import { processForecastData } from "./forecastProcessor";
+import "./App.css";
 
 function App() {
   const [searchInput, setSearchInput] = useState(""); // Creating a state variable to store the search input
@@ -11,6 +12,7 @@ function App() {
   const [lat, setLat] = useState(null); // Creating a state variable to store the latitude
   const [lon, setLon] = useState(null); // Creating a state variable to store the longitude
   const [forecastData, setForecastData] = useState([]); // Creating a state variable to store the forecast data
+  const [searchedCity, setSearchedCity] = useState(""); // Creating a state variable to store the searched city
 
   // Creating a function to handle the search input change
   function handleInputChange(event) {
@@ -48,6 +50,8 @@ function App() {
   // Creating a function to handle the search form submission
   function handleSearchSubmit(event) {
     event.preventDefault();
+    // Update searchedCity when form is submitted
+    setSearchedCity(searchInput);
 
     // Fetching the coordinates of the location
     fetchCoordinates(searchInput)
@@ -88,15 +92,19 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="app-wrapper">
       <Header
         searchInput={searchInput}
         onInputChange={handleInputChange}
         onSearchSubmit={handleSearchSubmit}
       />
-      <WeatherDisplay weatherData={weatherData} />
+      <WeatherDisplay weatherData={weatherData} searchedCity={searchedCity} />
       {lat && lon && <WeatherMap latitude={lat} longitude={lon} />}
-      {weatherData && <h2>{weatherData.name} 5 day forecast</h2>}
+      {weatherData && (
+        <div className="forecast-header">
+          <h2>{weatherData.name} 4 day forecast</h2>
+        </div>
+      )}
       {forecastData && forecastData.length > 0 && (
         <WeatherForecast forecastData={forecastData} />
       )}

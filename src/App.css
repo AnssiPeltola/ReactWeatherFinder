@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.app-wrapper {
+  width: 90%; /* Take up 90% of the screen width */
+  max-width: 400px; /* But don't go over 400px */
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(to bottom right, #bdf2f0, #89e1e3);
+}
+
+/* If the screen is 600px or wider */
+@media screen and (min-width: 600px) {
+  .app-wrapper {
+    width: 80%; /* Take up 80% of the screen width */
+    max-width: 400px; /* But don't go over 400px */
+  }
+}
+
+/* If the screen is 900px or wider */
+@media screen and (min-width: 900px) {
+  .app-wrapper {
+    width: 70%; /* Take up 70% of the screen width */
+    max-width: 400px; /* But don't go over 400px */
+  }
+}
+
+.forecast-header {
+  text-align: center;
+}

@@ -1,11 +1,12 @@
 import React from "react";
+import "./WeatherDisplay.css";
 
-const WeatherDisplay = ({ weatherData }) => {
+const WeatherDisplay = ({ weatherData, searchedCity }) => {
   if (!weatherData) return <p>No weather data available</p>;
 
   return (
-    <div>
-      <h2>Weather for {weatherData.name}</h2>
+    <div className="weather-display">
+      <h2>Weather for {searchedCity}</h2>
       <p>Temperature: {weatherData.main.temp}°C</p>
       <p>Feels like: {weatherData.main.feels_like}°C</p>
       <p>Humidity: {weatherData.main.humidity}%</p>

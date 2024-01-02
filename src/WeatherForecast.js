@@ -1,4 +1,5 @@
 import React from "react";
+import "./WeatherForecast.css";
 
 // The WeatherForecast component takes forecast data and renders a weather forecast UI
 const WeatherForecast = ({ forecastData }) => {

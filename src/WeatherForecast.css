@@ -1,0 +1,20 @@
+.forecast-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.forecast-box {
+  background-color: #f0f8ff;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  width: calc(50% - 10px); /* Adjust this value to your liking */
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.forecast-box p {
+  margin: 0;
+  padding: 0;
+}
