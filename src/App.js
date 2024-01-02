@@ -96,7 +96,7 @@ function App() {
       />
       <WeatherDisplay weatherData={weatherData} />
       {lat && lon && <WeatherMap latitude={lat} longitude={lon} />}
-      <h2>{weatherData.name} 5 day forecast</h2>
+      {weatherData && <h2>{weatherData.name} 5 day forecast</h2>}
       {forecastData && forecastData.length > 0 && (
         <WeatherForecast forecastData={forecastData} />
       )}
