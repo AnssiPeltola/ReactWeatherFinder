@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import Header from "./Header"; // Importing the Header component
 import WeatherDisplay from "./WeatherDisplay";
 import WeatherMap from "./WeatherMap";
+import WeatherForecast from "./WeatherForecast";
+import { processForecastData } from "./forecastProcessor";
 
 function App() {
   const [searchInput, setSearchInput] = useState(""); // Creating a state variable to store the search input
   const [weatherData, setWeatherData] = useState(null); // Creating a state variable to store the weather data
   const [lat, setLat] = useState(null); // Creating a state variable to store the latitude
   const [lon, setLon] = useState(null); // Creating a state variable to store the longitude
+  const [forecastData, setForecastData] = useState([]); // Creating a state variable to store the forecast data
 
   // Creating a function to handle the search input change
   function handleInputChange(event) {
@@ -20,22 +23,26 @@ function App() {
     const GEOCODING_API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
     const GEOCODING_API_URL = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${GEOCODING_API_KEY}`;
 
-    return fetch(GEOCODING_API_URL)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok for geocoding");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.length === 0) {
-          throw new Error("No location found");
-        }
-        return {
-          lat: data[0].lat,
-          lon: data[0].lon,
-        };
-      });
+    // Fetching the coordinates of the location
+    return (
+      fetch(GEOCODING_API_URL)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok for geocoding");
+          }
+          return response.json();
+        })
+        // Then process the data
+        .then((data) => {
+          if (data.length === 0) {
+            throw new Error("No location found");
+          }
+          return {
+            lat: data[0].lat,
+            lon: data[0].lon,
+          };
+        })
+    );
   }
 
   // Creating a function to handle the search form submission
@@ -45,22 +52,35 @@ function App() {
     // Fetching the coordinates of the location
     fetchCoordinates(searchInput)
       .then(({ lat, lon }) => {
-        setLat(lat);
-        setLon(lon);
+        setLat(lat); // set state, but don't use it immediately
+        setLon(lon); // set state, but don't use it immediately
 
+        // Creating the API URLs
         const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-        const API_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`; // If want Fahrenheit units, change units=metric to units=imperial
-        return fetch(API_URL);
+        const API_WEATHER_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+        const API_FORECAST_URL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+
+        // Fetch the weather data
+        return (
+          fetch(API_WEATHER_URL)
+            .then((response) => {
+              if (!response.ok)
+                throw new Error("Network response was not ok for weather data");
+              return response.json();
+            })
+            // Then process the weather data
+            .then((data) => {
+              setWeatherData(data);
+              // Then fetch the forecast data
+              return fetch(API_FORECAST_URL);
+            })
+        );
       })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok for weather data");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data); // Logging the data to the consolewww
-        setWeatherData(data); // Updating the weather data state variable
+      // Then process the forecast data
+      .then((response) => response.json())
+      .then((forecast) => {
+        const processedData = processForecastData(forecast.list);
+        setForecastData(processedData);
       })
       .catch((error) => {
         console.error("Error fetching weather data:", error);
@@ -76,6 +96,10 @@ function App() {
       />
       <WeatherDisplay weatherData={weatherData} />
       {lat && lon && <WeatherMap latitude={lat} longitude={lon} />}
+      <h2>{weatherData.name} 5 day forecast</h2>
+      {forecastData && forecastData.length > 0 && (
+        <WeatherForecast forecastData={forecastData} />
+      )}
     </div>
   );
 }
