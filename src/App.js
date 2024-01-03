@@ -25,26 +25,25 @@ function App() {
     const GEOCODING_API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
     const GEOCODING_API_URL = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${GEOCODING_API_KEY}`;
 
-    // Fetching the coordinates of the location
-    return (
-      fetch(GEOCODING_API_URL)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok for geocoding");
-          }
-          return response.json();
-        })
-        // Then process the data
-        .then((data) => {
-          if (data.length === 0) {
-            throw new Error("No location found");
-          }
-          return {
-            lat: data[0].lat,
-            lon: data[0].lon,
-          };
-        })
-    );
+    return fetch(GEOCODING_API_URL)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok for geocoding");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.length === 0) {
+          // Reset weather and forecast data if no location is found
+          setWeatherData(null);
+          setForecastData([]);
+          throw new Error("No location found");
+        }
+        return {
+          lat: data[0].lat,
+          lon: data[0].lon,
+        };
+      });
   }
 
   // Creating a function to handle the search form submission
@@ -102,7 +101,7 @@ function App() {
       {lat && lon && <WeatherMap latitude={lat} longitude={lon} />}
       {weatherData && (
         <div className="forecast-header">
-          <h2>{weatherData.name} 4 day forecast</h2>
+          <h2>{searchedCity} 4 day forecast</h2>
         </div>
       )}
       {forecastData && forecastData.length > 0 && (

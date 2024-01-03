@@ -10,7 +10,7 @@
 }
 
 .search-form {
-  margin-left: 10px; /* Adjust this value to your liking */
+  margin-left: 5px;
 }
 
 .search-form input[type="text"] {
@@ -21,15 +21,15 @@
   font-size: 16px;
 }
 
-.search-form input[type="text"]:focus {
-  border: 1px solid #59bec0;
-}
+/* .search-form input[type="text"]:focus {
+  border: 1px solid #63bec0;
+} */
 
 .search-form button {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  background-color: #89e1e3;
+  background-color: #69cfd1;
   color: rgb(0, 0, 0);
   font-size: 16px;
   cursor: pointer;
