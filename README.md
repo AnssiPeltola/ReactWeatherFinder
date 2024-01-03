@@ -27,6 +27,7 @@ Weather Finder is a responsive web application that allows users to search for w
 
 5. Run the app using `npm start`.
 
+## Screenshot
 ![Weather Finder App Screenshot](https://github.com/AnssiPeltola/ReactWeatherFinder/blob/main/WeatherFinderApp.png)
 
 ## License
